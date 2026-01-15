@@ -19,7 +19,7 @@ sudo apt install -y \
     delta \
     unzip \
     fontconfig \
-    bat /
+    bat \
     gh
 
 # === Install zoxide ===
