@@ -3,23 +3,39 @@ set -e
 
 DOTFILES_DIR="$(cd "$(dirname "$0")" && pwd)"
 
-# === Update system ===
-echo "[*] Updating system..."
-sudo apt update && sudo apt upgrade -y
+# === Install Homebrew ===
+echo "[*] Checking Homebrew..."
+if ! command -v brew &> /dev/null; then
+    echo "    Installing Homebrew..."
+    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+
+    # Add brew to PATH for this session
+    if [[ -f /opt/homebrew/bin/brew ]]; then
+        eval "$(/opt/homebrew/bin/brew shellenv)"
+    elif [[ -f /usr/local/bin/brew ]]; then
+        eval "$(/usr/local/bin/brew shellenv)"
+    fi
+else
+    echo "    Homebrew already installed, skipping..."
+fi
+
+# === Update Homebrew ===
+echo "[*] Updating Homebrew..."
+brew update
 
 # === Install core packages ===
 echo "[*] Installing packages..."
-sudo apt install -y \
+brew install \
     zsh \
     fzf \
     stow \
     curl \
     git \
-    delta \
-    unzip \
-    fontconfig \
+    git-delta \
     bat \
-    gh
+    gh \
+    lazygit \
+    zoxide
 
 # === Install Go ===
 echo "[*] Installing Go..."
@@ -27,7 +43,7 @@ GO_VERSION="1.25.6"
 ARCH=$(uname -m)
 if [ "$ARCH" = "x86_64" ]; then
     GO_ARCH="amd64"
-elif [ "$ARCH" = "aarch64" ]; then
+elif [ "$ARCH" = "arm64" ]; then
     GO_ARCH="arm64"
 else
     echo "    Unsupported architecture: $ARCH"
@@ -35,7 +51,7 @@ else
 fi
 
 if ! command -v go &> /dev/null || [ "$(go version | awk '{print $3}')" != "go$GO_VERSION" ]; then
-    curl -fsSL "https://go.dev/dl/go${GO_VERSION}.linux-${GO_ARCH}.tar.gz" -o /tmp/go.tar.gz
+    curl -fsSL "https://go.dev/dl/go${GO_VERSION}.darwin-${GO_ARCH}.tar.gz" -o /tmp/go.tar.gz
     sudo rm -rf /usr/local/go
     sudo tar -C /usr/local -xzf /tmp/go.tar.gz
     rm /tmp/go.tar.gz
@@ -43,27 +59,13 @@ else
     echo "    Go $GO_VERSION already installed, skipping..."
 fi
 
-# === Install lazygit via Go ===
-echo "[*] Installing lazygit..."
-export PATH="$PATH:/usr/local/go/bin:$HOME/go/bin"
-if ! command -v lazygit &> /dev/null; then
-    go install github.com/jesseduffield/lazygit@latest
-else
-    echo "    lazygit already installed, skipping..."
-fi
-
-# === Install zoxide ===
-echo "[*] Installing zoxide..."
-curl -sS https://raw.githubusercontent.com/ajeetdsouza/zoxide/main/install.sh | bash
-
 # === Install JetBrains Mono Nerd Font ===
 echo "[*] Installing JetBrains Mono Nerd Font..."
-if [ ! -f ~/.local/share/fonts/JetBrainsMonoNerdFont-Regular.ttf ]; then
-    mkdir -p ~/.local/share/fonts
+if [ ! -f ~/Library/Fonts/JetBrainsMonoNerdFont-Regular.ttf ]; then
+    mkdir -p ~/Library/Fonts
     curl -fLo "/tmp/JetBrainsMono.zip" \
         https://github.com/ryanoasis/nerd-fonts/releases/latest/download/JetBrainsMono.zip
-    unzip -o /tmp/JetBrainsMono.zip -d ~/.local/share/fonts/
-    fc-cache -fv
+    unzip -o /tmp/JetBrainsMono.zip -d ~/Library/Fonts/
     rm /tmp/JetBrainsMono.zip
 else
     echo "    Font already installed, skipping..."
@@ -71,14 +73,8 @@ fi
 
 # === Install Ghostty ===
 echo "[*] Installing Ghostty..."
-GHOSTTY_DEB="$DOTFILES_DIR/ghostty_1.2.3-0.ppa1_amd64_trixie.deb"
-if ! command -v ghostty &> /dev/null; then
-    if [ -f "$GHOSTTY_DEB" ]; then
-        sudo dpkg -i "$GHOSTTY_DEB"
-        rm "$GHOSTTY_DEB"
-    else
-        echo "    Ghostty .deb not found, skipping installation..."
-    fi
+if ! command -v ghostty &> /dev/null && [ ! -d "/Applications/Ghostty.app" ]; then
+    brew install --cask ghostty
 else
     echo "    Ghostty already installed, skipping..."
 fi
@@ -125,7 +121,7 @@ fi
 echo "[*] Setting zsh as default shell..."
 ZSH_PATH="$(which zsh)"
 if [ "$SHELL" != "$ZSH_PATH" ]; then
-    sudo chsh -s "$ZSH_PATH" "$USER"
+    chsh -s "$ZSH_PATH"
     echo "    Default shell changed to zsh. Please log out and back in for this to take effect."
 else
     echo "    zsh is already the default shell, skipping..."

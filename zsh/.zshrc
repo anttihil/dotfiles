@@ -33,7 +33,11 @@ export TERM=xterm-256color
 alias lg="lazygit"
 alias gs="git status"
 alias gd="git diff"
-alias cat="batcat"
+if [[ "$(uname)" == "Darwin" ]]; then
+    alias cat="bat"
+else
+    alias cat="batcat"
+fi
 
 # === Private configs (optional) ===
 [[ -f ~/.config/private/work_aliases.zsh ]] && source ~/.config/private/work_aliases.zsh
