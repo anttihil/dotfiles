@@ -1,5 +1,10 @@
 # ~/.zshrc
 
+# === PATH setup (before oh-my-zsh so plugins can find binaries) ===
+export PATH="$HOME/.local/bin:$PATH"
+export PATH=$PATH:/usr/local/go/bin
+export PATH=$PATH:$HOME/go/bin
+
 # === Oh My Zsh configuration ===
 export ZSH="$HOME/.oh-my-zsh"
 
@@ -49,10 +54,6 @@ export NVM_DIR="$HOME/.config/nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
-export PATH=$PATH:/usr/local/go/bin
-export PATH="$HOME/.local/bin:$PATH"
-export PATH=$PATH:$HOME/go/bin
-
 eval "$(fzf --zsh)"
 
 # === fzf keybindings ===
@@ -66,4 +67,5 @@ if command -v zoxide &> /dev/null; then
     eval "$(zoxide init zsh)"
 fi
 
-. "$HOME/.cargo/env"
+# === Rust/Cargo (optional) ===
+[[ -f "$HOME/.cargo/env" ]] && . "$HOME/.cargo/env"
