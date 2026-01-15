@@ -18,7 +18,8 @@ sudo apt install -y \
     git \
     delta \
     unzip \
-    fontconfig
+    fontconfig \
+    bat
 
 # === Install zoxide ===
 echo "[*] Installing zoxide..."

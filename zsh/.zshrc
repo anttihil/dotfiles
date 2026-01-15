@@ -23,10 +23,37 @@ source $ZSH/oh-my-zsh.sh
 export EDITOR=vim
 export PAGER=delta
 
-# === zoxide initialization ===
-if command -v zoxide &> /dev/null; then
-    eval "$(zoxide init zsh)"
-fi
+# === Custom aliases ===
+alias lg="lazygit"
+alias gs="git status"
+alias gd="git diff"
+alias cat="batcat"
+
+# === Private configs (optional) ===
+[[ -f ~/.config/private/work_aliases.zsh ]] && source ~/.config/private/work_aliases.zsh
+[[ -f ~/.config/private/api_keys.env ]] && source ~/.config/private/api_keys.env
+
+# Create worktree + branch from current branch
+# Usage: gwn branch-name
+gwn() {
+  git worktree add -b "$1" "../worktrees/$1" && cd "../worktrees/$1"
+}
+
+# Remove worktree and delete branch
+# Usage: gwr branch-name
+gwr() {
+  git worktree remove "../worktrees/$1" && git branch -D "$1"
+}
+
+export NVM_DIR="$HOME/.config/nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+export PATH=$PATH:/usr/local/go/bin
+export PATH="$HOME/.local/bin:$PATH"
+export PATH=$PATH:$HOME/go/bin
+
+eval "$(fzf --zsh)"
 
 # === fzf keybindings ===
 if command -v fzf &> /dev/null; then
@@ -34,11 +61,9 @@ if command -v fzf &> /dev/null; then
     source /usr/share/doc/fzf/examples/completion.zsh 2>/dev/null || true
 fi
 
-# === Custom aliases ===
-alias lg="lazygit"
-alias gs="git status"
-alias gd="git diff"
+# === zoxide initialization ===
+if command -v zoxide &> /dev/null; then
+    eval "$(zoxide init zsh)"
+fi
 
-# === Private configs (optional) ===
-[[ -f ~/.config/private/work_aliases.zsh ]] && source ~/.config/private/work_aliases.zsh
-[[ -f ~/.config/private/api_keys.env ]] && source ~/.config/private/api_keys.env
+. "$HOME/.cargo/env"
