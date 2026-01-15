@@ -12,7 +12,6 @@ echo "[*] Installing packages..."
 sudo apt install -y \
     zsh \
     fzf \
-    lazygit \
     stow \
     curl \
     git \
@@ -21,6 +20,37 @@ sudo apt install -y \
     fontconfig \
     bat \
     gh
+
+# === Install Go ===
+echo "[*] Installing Go..."
+GO_VERSION="1.25.6"
+ARCH=$(uname -m)
+if [ "$ARCH" = "x86_64" ]; then
+    GO_ARCH="amd64"
+elif [ "$ARCH" = "aarch64" ]; then
+    GO_ARCH="arm64"
+else
+    echo "    Unsupported architecture: $ARCH"
+    exit 1
+fi
+
+if ! command -v go &> /dev/null || [ "$(go version | awk '{print $3}')" != "go$GO_VERSION" ]; then
+    curl -fsSL "https://go.dev/dl/go${GO_VERSION}.linux-${GO_ARCH}.tar.gz" -o /tmp/go.tar.gz
+    sudo rm -rf /usr/local/go
+    sudo tar -C /usr/local -xzf /tmp/go.tar.gz
+    rm /tmp/go.tar.gz
+else
+    echo "    Go $GO_VERSION already installed, skipping..."
+fi
+
+# === Install lazygit via Go ===
+echo "[*] Installing lazygit..."
+export PATH="$PATH:/usr/local/go/bin:$HOME/go/bin"
+if ! command -v lazygit &> /dev/null; then
+    go install github.com/jesseduffield/lazygit@latest
+else
+    echo "    lazygit already installed, skipping..."
+fi
 
 # === Install zoxide ===
 echo "[*] Installing zoxide..."
