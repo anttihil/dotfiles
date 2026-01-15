@@ -11,6 +11,9 @@
 [pull]
     rebase = true
 
+[merge]
+    conflictStyle = zdiff3
+
 [delta]
     navigate = true
     side-by-side = false
