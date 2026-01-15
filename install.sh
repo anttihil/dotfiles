@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 set -e
 
+DOTFILES_DIR="$(cd "$(dirname "$0")" && pwd)"
+
 # === Update system ===
 echo "[*] Updating system..."
 sudo apt update && sudo apt upgrade -y
@@ -37,7 +39,15 @@ fi
 
 # === Install Ghostty ===
 echo "[*] Installing Ghostty..."
-curl -fsSL https://raw.githubusercontent.com/mkasberg/ghostty-ubuntu/HEAD/install.sh | bash
+GHOSTTY_DEB="$DOTFILES_DIR/ghostty_1.2.3-0.ppa1_amd64_trixie.deb"
+if ! command -v ghostty &> /dev/null; then
+    sudo dpkg -i "$GHOSTTY_DEB"
+else
+    echo "    Ghostty already installed, skipping..."
+fi
+if [ -f "$GHOSTTY_DEB" ]; then
+    rm "$GHOSTTY_DEB"
+fi
 
 # === Install Oh My Zsh ===
 echo "[*] Installing Oh My Zsh..."
@@ -65,7 +75,13 @@ fi
 
 # === Set zsh as default shell ===
 echo "[*] Setting zsh as default shell..."
-chsh -s "$(which zsh)"
+ZSH_PATH="$(which zsh)"
+if [ "$SHELL" != "$ZSH_PATH" ]; then
+    sudo chsh -s "$ZSH_PATH" "$USER"
+    echo "    Default shell changed to zsh. Please log out and back in for this to take effect."
+else
+    echo "    zsh is already the default shell, skipping..."
+fi
 
 # === Backup existing configs ===
 echo "[*] Backing up existing configs..."
@@ -84,7 +100,6 @@ backup_if_exists ~/.config/ghostty/config
 
 # === Symlink dotfiles using stow ===
 echo "[*] Linking dotfiles..."
-DOTFILES_DIR="$(cd "$(dirname "$0")" && pwd)"
 cd "$DOTFILES_DIR"
 
 for dir in zsh lazygit git ghostty; do
