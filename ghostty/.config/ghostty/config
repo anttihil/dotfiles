@@ -11,4 +11,4 @@ cursor-style-blink = false
 
 copy-on-select = clipboard
 
-shell-integration-features = ssh-terminfo
+shell-integration-features = ssh-terminfo,ssh-env
