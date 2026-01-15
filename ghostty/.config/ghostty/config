@@ -10,3 +10,5 @@ cursor-style = block
 cursor-style-blink = false
 
 copy-on-select = clipboard
+
+shell-integration-features = ssh-terminfo
