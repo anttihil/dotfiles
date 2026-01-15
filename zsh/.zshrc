@@ -27,6 +27,7 @@ source $ZSH/oh-my-zsh.sh
 # === General environment ===
 export EDITOR=vim
 export PAGER=delta
+export TERM=xterm-256color
 
 # === Custom aliases ===
 alias lg="lazygit"
