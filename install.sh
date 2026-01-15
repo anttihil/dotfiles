@@ -19,7 +19,8 @@ sudo apt install -y \
     delta \
     unzip \
     fontconfig \
-    bat
+    bat /
+    gh
 
 # === Install zoxide ===
 echo "[*] Installing zoxide..."
@@ -42,12 +43,14 @@ fi
 echo "[*] Installing Ghostty..."
 GHOSTTY_DEB="$DOTFILES_DIR/ghostty_1.2.3-0.ppa1_amd64_trixie.deb"
 if ! command -v ghostty &> /dev/null; then
-    sudo dpkg -i "$GHOSTTY_DEB"
+    if [ -f "$GHOSTTY_DEB" ]; then
+        sudo dpkg -i "$GHOSTTY_DEB"
+        rm "$GHOSTTY_DEB"
+    else
+        echo "    Ghostty .deb not found, skipping installation..."
+    fi
 else
     echo "    Ghostty already installed, skipping..."
-fi
-if [ -f "$GHOSTTY_DEB" ]; then
-    rm "$GHOSTTY_DEB"
 fi
 
 # === Install Oh My Zsh ===
