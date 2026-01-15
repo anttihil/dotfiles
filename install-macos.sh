@@ -26,10 +26,8 @@ brew update
 # === Install core packages ===
 echo "[*] Installing packages..."
 brew install \
-    zsh \
     fzf \
     stow \
-    curl \
     git \
     git-delta \
     bat \
