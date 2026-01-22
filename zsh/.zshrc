@@ -9,7 +9,7 @@ export PATH=$PATH:$HOME/go/bin
 export ZSH="$HOME/.oh-my-zsh"
 
 # Theme (robbyrussell is the default, change as desired)
-ZSH_THEME="robbyrussell"
+ZSH_THEME="agnoster"
 
 # Plugins
 plugins=(
@@ -17,8 +17,7 @@ plugins=(
     fzf
     zoxide
     command-not-found
-    sudo
-    zsh-autosuggestions
+    
     zsh-syntax-highlighting
 )
 
@@ -58,19 +57,6 @@ gwr() {
 export NVM_DIR="$HOME/.config/nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
-
-eval "$(fzf --zsh)"
-
-# === fzf keybindings ===
-if command -v fzf &> /dev/null; then
-    source /usr/share/doc/fzf/examples/key-bindings.zsh 2>/dev/null || true
-    source /usr/share/doc/fzf/examples/completion.zsh 2>/dev/null || true
-fi
-
-# === zoxide initialization ===
-if command -v zoxide &> /dev/null; then
-    eval "$(zoxide init zsh)"
-fi
 
 # === Rust/Cargo (optional) ===
 [[ -f "$HOME/.cargo/env" ]] && . "$HOME/.cargo/env"
