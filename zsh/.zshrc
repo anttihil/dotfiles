@@ -24,6 +24,7 @@ plugins=(
 source $ZSH/oh-my-zsh.sh
 
 # === General environment ===
+export XDG_CONFIG_HOME="$HOME/.config"
 export EDITOR=vim
 export PAGER=delta
 export TERM=xterm-256color
@@ -37,6 +38,18 @@ if [[ "$(uname)" == "Darwin" ]]; then
 else
     alias cat="batcat"
 fi
+
+export GEMINI_API_KEY=REDACTED
+
+# Moria CLI (where mithril is found)
+export PATH="$PATH:/Users/anttihiltunen/projects/humanities-universal-theme/moria-cli"
+
+# Moria CLI bash completion
+autoload -U +X bashcompinit && bashcompinit
+source /Users/anttihiltunen/projects/humanities-universal-theme/moria-cli/moria-completion.bash
+
+# Added by Antigravity
+export PATH="/Users/anttihiltunen/.antigravity/antigravity/bin:$PATH"
 
 # === Private configs (optional) ===
 [[ -f ~/.config/private/work_aliases.zsh ]] && source ~/.config/private/work_aliases.zsh
@@ -60,3 +73,5 @@ export NVM_DIR="$HOME/.config/nvm"
 
 # === Rust/Cargo (optional) ===
 [[ -f "$HOME/.cargo/env" ]] && . "$HOME/.cargo/env"
+
+export PATH="/usr/local/bin:/Users/anttihiltunen/projects/scripts:/Users/anttihiltunen/.composer/vendor/bin:$PATH"

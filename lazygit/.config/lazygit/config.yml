@@ -1,0 +1,23 @@
+# ~/.config/lazygit/config.yml
+
+gui:
+  # Use Nerd Fonts for icons if available
+  nerdFontsVersion: "3"
+  showIcons: true
+  theme:
+    activeBorderColor:
+      - blue
+      - bold
+    inactiveBorderColor:
+      - white
+    selectedLineBgColor:
+      - black
+    selectedRangeBgColor:
+      - black
+git:
+  pagers:
+    - colorArg: always
+      pager: delta --paging=never --dark --line-numbers --syntax-theme=OneHalfDark
+  # Optional: always rebase when pulling
+  pull:
+    mode: rebase
