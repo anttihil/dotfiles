@@ -39,16 +39,6 @@ else
     alias cat="batcat"
 fi
 
-# Moria CLI (where mithril is found)
-export PATH="$PATH:/Users/anttihiltunen/projects/humanities-universal-theme/moria-cli"
-
-# Moria CLI bash completion
-autoload -U +X bashcompinit && bashcompinit
-source /Users/anttihiltunen/projects/humanities-universal-theme/moria-cli/moria-completion.bash
-
-# Added by Antigravity
-export PATH="/Users/anttihiltunen/.antigravity/antigravity/bin:$PATH"
-
 # === Private configs (optional) ===
 [[ -f ~/.config/private/work_aliases.zsh ]] && source ~/.config/private/work_aliases.zsh
 [[ -f ~/.config/private/api_keys.env ]] && source ~/.config/private/api_keys.env
@@ -71,5 +61,3 @@ export NVM_DIR="$HOME/.config/nvm"
 
 # === Rust/Cargo (optional) ===
 [[ -f "$HOME/.cargo/env" ]] && . "$HOME/.cargo/env"
-
-export PATH="/usr/local/bin:/Users/anttihiltunen/projects/scripts:/Users/anttihiltunen/.composer/vendor/bin:$PATH"
