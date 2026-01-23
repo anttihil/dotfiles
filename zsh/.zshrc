@@ -39,8 +39,6 @@ else
     alias cat="batcat"
 fi
 
-export GEMINI_API_KEY=REDACTED
-
 # Moria CLI (where mithril is found)
 export PATH="$PATH:/Users/anttihiltunen/projects/humanities-universal-theme/moria-cli"
 
