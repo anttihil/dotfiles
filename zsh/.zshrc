@@ -41,7 +41,11 @@ fi
 
 # === Private configs (optional) ===
 [[ -f ~/.config/private/work_aliases.zsh ]] && source ~/.config/private/work_aliases.zsh
-[[ -f ~/.config/private/api_keys.env ]] && source ~/.config/private/api_keys.env
+if [[ -f ~/.config/private/api_keys.env ]]; then
+  set -a
+  source ~/.config/private/api_keys.env
+  set +a
+fi
 
 # Create worktree + branch from current branch
 # Usage: gwn branch-name
