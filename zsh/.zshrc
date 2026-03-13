@@ -43,16 +43,26 @@ if [[ -f ~/.config/private/api_keys.env ]]; then
   set +a
 fi
 
-# Create worktree + branch from current branch
+# Create worktree + branch inside project (worktrees/ subdir, must be gitignored)
+# Symlinks common dependency dirs so reinstalls are not needed
 # Usage: gwn branch-name
 gwn() {
-  git worktree add -b "$1" "../worktrees/$1" && cd "../worktrees/$1"
+  local root
+  root=$(git rev-parse --show-toplevel) || return 1
+  local dest="$root/worktrees/$1"
+  git worktree add -b "$1" "$dest" || return 1
+  for dep in node_modules vendor .venv; do
+    [[ -d "$root/$dep" ]] && ln -s "$root/$dep" "$dest/$dep"
+  done
+  cd "$dest"
 }
 
 # Remove worktree and delete branch
 # Usage: gwr branch-name
 gwr() {
-  git worktree remove "../worktrees/$1" && git branch -D "$1"
+  local root
+  root=$(git rev-parse --show-toplevel) || return 1
+  git worktree remove "$root/worktrees/$1" && git branch -D "$1"
 }
 
 export NVM_DIR="$HOME/.config/nvm"
