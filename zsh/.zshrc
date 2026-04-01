@@ -1,9 +1,7 @@
 # ~/.zshrc
 
 # === PATH setup (before oh-my-zsh so plugins can find binaries) ===
-export PATH="$HOME/.local/bin:$PATH"
-export PATH=$PATH:/usr/local/go/bin
-export PATH=$PATH:$HOME/go/bin
+export PATH="$HOME/.local/bin:$HOME/go/bin:$(npm config get prefix)/bin:/usr/local/go/bin:$PATH"
 
 # === Oh My Zsh configuration ===
 export ZSH="$HOME/.oh-my-zsh"
@@ -26,7 +24,6 @@ source $ZSH/oh-my-zsh.sh
 # === General environment ===
 export XDG_CONFIG_HOME="$HOME/.config"
 export EDITOR=vim
-export PAGER=delta
 export TERM=xterm-256color
 
 # === Custom aliases ===
